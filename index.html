@@ -1690,6 +1690,12 @@ table.nomencl td:first-child{font-weight:700; text-align:center}
 .sk-toolbar .sw{width:24px; height:24px; padding:0; border-radius:50%; border:2px solid #fff; outline:1px solid var(--trait)}
 .sk-toolbar .sw[aria-pressed="true"]{outline:2px solid var(--encre)}
 .sk-toolbar .spacer{flex:1}
+.sk-syms{display:flex; flex-wrap:wrap; gap:4px; background:#F6F8FA; border:1px solid var(--trait); border-bottom:0; padding:5px}
+.sk-syms[hidden]{display:none}
+.sk-syms button{display:inline-flex; flex-direction:column; align-items:center; gap:2px; border:1px solid var(--trait); background:#fff; padding:3px 5px; font-size:.72rem; line-height:1.1; cursor:pointer; border-radius:2px; width:92px}
+.sk-syms button canvas{width:56px; height:38px}
+.sk-syms button[aria-pressed="true"]{outline:2px solid var(--bleu); background:var(--bleu-pale)}
+.sketch.locked .sk-syms{display:none}
 .sk-stage{position:relative; border:1px solid var(--trait); background:#fff; line-height:0; overflow:hidden}
 .sk-stage.zoomed{overflow:auto; max-height:min(72vh,640px)}
 /* au zoom, seule la largeur pilote la taille : la hauteur suit, sinon l'image est écrasée */
@@ -2140,6 +2146,7 @@ table.gps.stack{display:table}
                 <button type="button" data-tool="arrow" aria-pressed="false">Flèche</button>
                 <button type="button" data-tool="text" aria-pressed="false">Texte</button>
                 <button type="button" data-tool="erase" aria-pressed="false">Gomme</button>
+                <button type="button" data-tool="sym" aria-pressed="false" title="Placer un symbole normalisé de liaison">Liaisons</button>
                 <span class="sep"></span>
                 <button type="button" class="sw" data-color="#1F5FA8" aria-label="Couleur bleue" aria-pressed="true" style="background:#1F5FA8"></button>
 <button type="button" class="sw" data-color="#1B7A43" aria-label="Couleur verte" aria-pressed="false" style="background:#1B7A43"></button>
@@ -2162,6 +2169,7 @@ table.gps.stack{display:table}
                 <button type="button" class="btn-drprint" data-act="drprint">Imprimer les DR</button>
                 <button type="button" data-act="full" aria-pressed="false">Plein écran</button>
               </div>
+              <div class="sk-syms" role="group" aria-label="Liaisons normalisées (NF EN ISO 3952-1)" hidden></div>
               <div class="sk-stage"><img class="sk-bg" src="data:image/png;base64,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" width="672" height="689" alt="" hidden>
                 <canvas role="img" aria-label="Schéma cinématique à compléter"></canvas></div>
               <div class="sk-foot">
@@ -2180,7 +2188,7 @@ table.gps.stack{display:table}
                 <p class="print-only se-print"></p>
               </div>
             </div>
-            <div class="sk-side"><p class="small">Classes d’équivalence : <b>E1</b> = corps 01 (bâti, magenta), galet 05 (rouge), levier 02 (bleu), tiroir 06 (vert). Écris le nom de chaque classe au bout de son trait de repère (outil Texte), puis complète la liaison en B et le contact en D.</p></div>
+            <div class="sk-side"><p class="small">Classes d’équivalence : <b>E1</b> = corps 01 (bâti, magenta), galet 05 (rouge), levier 02 (bleu), tiroir 06 (vert). Écris le nom de chaque classe au bout de son trait de repère (outil Texte), puis complète la liaison en B et le contact en D.</p><p class="small">Outil <b>Liaisons</b> : choisis un symbole normalisé dans la palette, puis clique au centre de la liaison et fais glisser le long de son axe pour l’orienter et le dimensionner (un simple clic le pose horizontal, à la taille par défaut). La gomme l’efface d’un clic.</p></div>
           </div>
           <p class="sk-note sk-note-wrap">La correction se superposera à ton tracé une fois la question Q1.4 validée. <span class="sk-wait" aria-live="polite"></span></p>
           <div class="q-expl" hidden><p class="q-expected"><span>Correction du tracé</span></p>
@@ -2206,8 +2214,10 @@ table.gps.stack{display:table}
                 <button type="button" data-tool="pen" aria-pressed="true">Crayon</button>
                 <button type="button" data-tool="line" aria-pressed="false">Ligne</button>
                 <button type="button" data-tool="arrow" aria-pressed="false">Flèche</button>
+                <button type="button" data-tool="cote" aria-pressed="false" title="Ligne de cote à deux flèches normalisées">Cote ↔</button>
                 <button type="button" data-tool="text" aria-pressed="false">Texte</button>
                 <button type="button" data-tool="erase" aria-pressed="false">Gomme</button>
+                <button type="button" data-tool="measure" aria-pressed="false" title="Mesurer une longueur sur le dessin (sans conversion d’échelle)">Mesurer</button>
                 <span class="sep"></span>
                 <button type="button" class="sw" data-color="#1F5FA8" aria-label="Couleur bleue" aria-pressed="true" style="background:#1F5FA8"></button>
 <button type="button" class="sw" data-color="#1B7A43" aria-label="Couleur verte" aria-pressed="false" style="background:#1B7A43"></button>
@@ -2248,17 +2258,17 @@ table.gps.stack{display:table}
                 <p class="print-only se-print"></p>
               </div>
             </div>
-            <div class="sk-side"><p class="small">Outil <b>Ligne</b> pour les lignes d’attache et de cote, <b>Flèche</b> pour les extrémités, <b>Texte</b> pour la valeur. Pendant le tracé d’une ligne, sa longueur s’affiche en centimètres <i>sur le dessin imprimé</i> : divise par 3 pour obtenir la dimension réelle.</p></div>
+            <div class="sk-side"><p class="small">Outil <b>Ligne</b> pour les lignes d’attache, <b>Cote ↔</b> pour la ligne de cote (deux flèches normalisées, placées à l’extérieur si la cote est trop courte), <b>Texte</b> pour la valeur. L’outil <b>Mesurer</b> donne la longueur en millimètres <i>sur le dessin</i>, sans tenir compte de l’échelle : c’est à toi de diviser par 3 pour obtenir la dimension réelle. La mesure n’est pas enregistrée dans ton tracé. Les outils Cote et Mesurer s’alignent automatiquement à l’horizontale ou à la verticale près de ces directions.</p></div>
           </div>
           <p class="sk-note sk-note-wrap">La correction se superposera à ton tracé une fois la question Q2.2 validée. <span class="sk-wait" aria-live="polite"></span></p>
           <div class="q-expl" hidden><p class="q-expected"><span>Correction du tracé</span></p>
-            <p>Exemple de réponse : longueur totale <b>40</b>, largeur de la fente <b>4</b>, largeur de la gorge <b>1,5</b>. D’autres choix sont justes : profondeur de la fente 11, diamètre du fond de gorge Ø6, largeur de la rainure 2, longueur de la partie guidée 24,5, rayon du bout sphérique SR6.</p><p><b>Règles.</b> Les lignes d’attache prolongent les arêtes ; la ligne de cote, parallèle à la dimension, porte deux flèches ; la valeur, en millimètres réels, s’écrit au-dessus de la ligne de cote. Ici, 12 cm mesurés sur le dessin donnent 120 mm ÷ 3 = 40 mm.</p></div>
+            <p>Exemple de réponse : longueur totale <b>40</b>, largeur de la fente <b>4</b>, largeur de la gorge <b>1,5</b>. D’autres choix sont justes : profondeur de la fente 11, diamètre du fond de gorge Ø6, largeur de la rainure 2, longueur de la partie guidée 24,5, rayon du bout sphérique SR6.</p><p><b>Règles.</b> Les lignes d’attache prolongent les arêtes ; la ligne de cote, parallèle à la dimension, porte deux flèches ; la valeur, en millimètres réels, s’écrit au-dessus de la ligne de cote. Ici, 120 mm mesurés sur le dessin donnent 120 ÷ 3 = 40 mm.</p></div>
         </div>
       <div class="qbar" role="group" aria-label="Q2.2"><div class="qb-num">Q2.2</div><div class="qb-docs">Documents à consulter : <button type="button" class="doc-chip" data-doc="DT2" aria-pressed="false">DT2</button></div><div class="qb-ans">Répondre : ci-dessous</div></div>
       
         <div class="q" id="q2_2" data-q="q2_2">
           <p class="q-stem"><span class="q-num">Q2.2</span> <strong>Quelle est la longueur totale réelle du coulisseau ?</strong></p>
-          <p class="q-hint" id="h-q2_2">Mesure sur le dessin (ou avec l’outil Ligne de Q2.1), puis tiens compte de l’échelle 3:1. Précision attendue : ± 0,5 mm. Saisis la valeur <strong>avec son unité</strong> : l’unité vaut la moitié des points de la question.</p>
+          <p class="q-hint" id="h-q2_2">Mesure sur le dessin (ou avec l’outil Mesurer de Q2.1), puis tiens compte de l’échelle 3:1. Précision attendue : ± 0,5 mm. Saisis la valeur <strong>avec son unité</strong> : l’unité vaut la moitié des points de la question.</p>
           <div class="q-row">
             <input type="text" class="q-input" id="in-q2_2" aria-label="Réponse Q2.2" aria-describedby="h-q2_2" autocomplete="off" autocapitalize="off" spellcheck="false">
             <button type="button" class="btn btn-validate">Valider</button>
@@ -2430,8 +2440,10 @@ table.gps.stack{display:table}
                 <button type="button" data-tool="pen" aria-pressed="true">Crayon</button>
                 <button type="button" data-tool="line" aria-pressed="false">Ligne</button>
                 <button type="button" data-tool="arrow" aria-pressed="false">Flèche</button>
+                <button type="button" data-tool="cote" aria-pressed="false" title="Ligne de cote à deux flèches normalisées">Cote ↔</button>
                 <button type="button" data-tool="text" aria-pressed="false">Texte</button>
                 <button type="button" data-tool="erase" aria-pressed="false">Gomme</button>
+                <button type="button" data-tool="measure" aria-pressed="false" title="Mesurer une longueur sur le dessin (sans conversion d’échelle)">Mesurer</button>
                 <span class="sep"></span>
                 <button type="button" class="sw" data-color="#1F5FA8" aria-label="Couleur bleue" aria-pressed="true" style="background:#1F5FA8"></button>
 <button type="button" class="sw" data-color="#D0342C" aria-label="Couleur rouge" aria-pressed="false" style="background:#D0342C"></button>
@@ -2472,7 +2484,7 @@ table.gps.stack{display:table}
                 <p class="print-only se-print"></p>
               </div>
             </div>
-            <div class="sk-side"><ul class="small"><li>Tracer en rouge l’axe de la surface Ø9 (axe A) et en bleu l’axe du trou Ø3.</li><li>Coter le trou <b>Ø3</b> et lui appliquer la tolérance d’orientation de Q4.2, de valeur <b>0,4</b>, par rapport à <b>A</b> (modèle : cours DT3, page 2).</li><li>Ajouter une <b>planéité 0,2</b> sur une surface plane, et une <b>cylindricité 0,2</b> sur la surface Ø9.</li><li>Ajouter l’état de surface <b>Ra 6,3</b> sur les surfaces essentielles au fonctionnement.</li></ul></div>
+            <div class="sk-side"><ul class="small"><li>Tracer en rouge l’axe de la surface Ø9 (axe A) et en bleu l’axe du trou Ø3.</li><li>Coter le trou <b>Ø3</b> et lui appliquer la tolérance d’orientation de Q4.2, de valeur <b>0,4</b>, par rapport à <b>A</b> (modèle : cours DT3, page 2).</li><li>Ajouter une <b>planéité 0,2</b> sur une surface plane, et une <b>cylindricité 0,2</b> sur la surface Ø9.</li><li>Ajouter l’état de surface <b>Ra 6,3</b> sur les surfaces essentielles au fonctionnement.</li><li>Outils utiles : <b>Cote ↔</b> pour une ligne de cote à flèches normalisées, <b>Mesurer</b> pour relever une longueur en millimètres sur le dessin (valeur brute, échelle 3:1 non appliquée, la mesure n’est pas enregistrée).</li></ul></div>
           </div>
           <p class="sk-note sk-note-wrap">La correction se superposera à ton tracé une fois la question Q4.2 validée. <span class="sk-wait" aria-live="polite"></span></p>
           <div class="q-expl" hidden><p class="q-expected"><span>Correction du tracé</span></p>
@@ -3249,7 +3261,7 @@ if (typeof module !== "undefined") module.exports = Grading;
     },
     /* Q4.3 — DR1 : axes, spécifications géométriques, états de surface */
     DRV2: {
-      pad: { t: 10, r: 10, b: 10, l: 10 }, rs: 1.8,
+      pad: { t: 10, r: 10, b: 10, l: 10 }, rs: 1.8, pxPerCm: 150 / 2.54,
       decorate: function () {},
       correction: function (c) {
         // axes
@@ -3290,6 +3302,85 @@ if (typeof module !== "undefined") module.exports = Grading;
     }
   };
 
+  /* ---------- Symboles normalisés des liaisons (NF EN ISO 3952-1, représentation plane) ----------
+     Repère local : x = axe de la liaison, unité u (demi-longueur du « palier »). */
+  var SYMS = [
+    ["pg", "Pivot glissant"], ["piv", "Pivot (axe dans le plan)"], ["pivz", "Pivot (axe ⊥ au plan)"],
+    ["gl", "Glissière"], ["glb", "Glissière (vue de bout)"], ["hel", "Hélicoïdale"],
+    ["rot", "Rotule"], ["ap", "Appui plan"], ["la", "Linéaire annulaire"],
+    ["lr", "Linéaire rectiligne"], ["ponc", "Ponctuelle"], ["enc", "Encastrement"], ["bati", "Bâti"]
+  ];
+  var SYM_U = 26;
+  function drawSym(ctx, k, x, y, ang, u, col, w) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = w; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    function L(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1 * u, y1 * u); ctx.lineTo(x2 * u, y2 * u); ctx.stroke(); }
+    function R(x1, y1, x2, y2) { ctx.strokeRect(x1 * u, y1 * u, (x2 - x1) * u, (y2 - y1) * u); }
+    function C(cx, cy, r, a0, a1) { ctx.beginPath(); ctx.arc(cx * u, cy * u, r * u, a0 || 0, a1 === undefined ? Math.PI * 2 : a1); ctx.stroke(); }
+    function hatch(x1, x2, yb, dir) { for (var t = x1; t <= x2 + 1e-6; t += 0.35) L(t, yb, t - 0.3, yb + 0.35 * dir); }
+    switch (k) {
+      case "pg": R(-1, -0.85, 1, 0.85); L(-2.2, 0, 2.2, 0); break;
+      case "piv": R(-1, -0.85, 1, 0.85); L(-2.2, 0, 2.2, 0); L(-1.3, -0.5, -1.3, 0.5); L(1.3, -0.5, 1.3, 0.5); break;
+      case "pivz": C(0, 0, 0.75); L(0.75, 0, 2.1, 0); L(0, 0.75, 0, 1.9); L(-0.6, 1.9, 0.6, 1.9);
+        ctx.beginPath(); ctx.arc(0, 0, Math.max(1.5, w), 0, Math.PI * 2); ctx.fill(); break;
+      case "gl": R(-1, -0.7, 1, 0.7); L(-2.2, -0.25, 2.2, -0.25); L(-2.2, 0.25, 2.2, 0.25); break;
+      case "glb": R(-1.1, -1.1, 1.1, 1.1); R(-0.5, -0.5, 0.5, 0.5); L(0, 1.1, 0, 2); break;
+      case "hel": R(-1, -0.85, 1, 0.85); L(-2.2, 0, 2.2, 0); L(-0.7, 0.85, -0.1, -0.85); L(0.1, 0.85, 0.7, -0.85); break;
+      case "rot": C(0, 0, 0.7); C(0, 0, 1.05, Math.PI * 0.25, Math.PI * 1.75); L(0.7, 0, 2.1, 0); L(-1.05, 0, -2.1, 0); break;
+      case "ap": L(-1.2, -0.2, 1.2, -0.2); L(-1.2, 0.2, 1.2, 0.2); L(0, -0.2, 0, -1.4); L(0, 0.2, 0, 1.4); break;
+      case "la": L(-1.4, -0.75, 1.4, -0.75); L(-1.4, 0.75, 1.4, 0.75); C(0, 0, 0.75); L(0.75, 0, 2.2, 0); L(-1.4, 0.75, -1.4, 1.6); break;
+      case "lr": L(-1.4, 0.3, 1.4, 0.3); L(0, 0.3, -0.55, -0.7); L(0, 0.3, 0.55, -0.7); L(-0.55, -0.7, 0.55, -0.7); L(0, -0.7, 0, -1.7); L(0, 0.3, 0, 1.5); break;
+      case "ponc": L(-1.4, 0.3, 1.4, 0.3); C(0, -0.4, 0.7); L(0, -1.1, 0, -1.9); L(0, 0.3, 0, 1.5); break;
+      case "enc": L(-1.6, 0, 0, 0); L(0, 0, 0, -1.6);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-0.55 * u, 0); ctx.lineTo(0, -0.55 * u); ctx.closePath(); ctx.fill(); break;
+      case "bati": L(-1.5, 0, 1.5, 0); hatch(-1.2, 1.5, 0, 1); break;
+    }
+    ctx.restore();
+  }
+  // Ligne de cote normalisée (ISO 129-1) : trait fin, flèches fermées pleines (≈ 3 mm, 30°) ;
+  // flèches placées à l'extérieur des lignes d'attache quand la cote est trop courte.
+  function coteN(ctx, x1, y1, x2, y2, col, h) {
+    var dx = x2 - x1, dy = y2 - y1, Lg = Math.hypot(dx, dy);
+    if (Lg < 1) return;
+    var ux = dx / Lg, uy = dy / Lg, hw = h * Math.tan(Math.PI / 12), w = Math.max(1.2, h / 11);
+    function head(tx, ty, dirx, diry) {   // pointe en (tx, ty), dirigée selon (dirx, diry)
+      ctx.beginPath(); ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - dirx * h - diry * hw, ty - diry * h + dirx * hw);
+      ctx.lineTo(tx - dirx * h + diry * hw, ty - diry * h - dirx * hw);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.save(); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = w; ctx.lineCap = "butt";
+    ctx.beginPath();
+    if (Lg >= 2.6 * h) { ctx.moveTo(x1 + ux * h * 0.8, y1 + uy * h * 0.8); ctx.lineTo(x2 - ux * h * 0.8, y2 - uy * h * 0.8); ctx.stroke(); head(x1, y1, -ux, -uy); head(x2, y2, ux, uy); }
+    else { var e = 2.2 * h; ctx.moveTo(x1 - ux * e, y1 - uy * e); ctx.lineTo(x2 + ux * e, y2 + uy * e); ctx.stroke(); head(x1, y1, ux, uy); head(x2, y2, -ux, -uy); }
+    ctx.restore();
+  }
+  // Instrument de mesure : non enregistré, valeur brute sur le dessin
+  function measureMark(ctx, s, lbl, k) {
+    var dx = s.b[0] - s.a[0], dy = s.b[1] - s.a[1], Lg = Math.hypot(dx, dy) || 1, nx = -dy / Lg, ny = dx / Lg, t = 7 * k;
+    line(ctx, s.a[0], s.a[1], s.b[0], s.b[1], ORNG, 1.4 * k, [6 * k, 4 * k]);
+    line(ctx, s.a[0] - nx * t, s.a[1] - ny * t, s.a[0] + nx * t, s.a[1] + ny * t, ORNG, 1.6 * k);
+    line(ctx, s.b[0] - nx * t, s.b[1] - ny * t, s.b[0] + nx * t, s.b[1] + ny * t, ORNG, 1.6 * k);
+    var size = 15 * k, mx = (s.a[0] + s.b[0]) / 2 + nx * 16 * k, my = (s.a[1] + s.b[1]) / 2 + ny * 16 * k;
+    ctx.save(); ctx.font = "700 " + size + "px system-ui, Segoe UI, Arial, sans-serif";
+    var tw = ctx.measureText(lbl).width; ctx.restore();
+    ctx.save(); ctx.fillStyle = "rgba(255,248,235,.95)"; ctx.strokeStyle = ORNG; ctx.lineWidth = 1.2 * k;
+    ctx.fillRect(mx - tw / 2 - 5 * k, my - size * 0.7, tw + 10 * k, size * 1.4); ctx.strokeRect(mx - tw / 2 - 5 * k, my - size * 0.7, tw + 10 * k, size * 1.4); ctx.restore();
+    text(ctx, lbl, mx, my, ORNG, size, "center", "700");
+  }
+  function snapHV(a, b, k) {   // aligne à l'horizontale / verticale à moins de 5°
+    var dx = b[0] - a[0], dy = b[1] - a[1], ang = Math.abs(Math.atan2(dy, dx)) % Math.PI, tol = 5 * Math.PI / 180;
+    if (ang < tol || Math.PI - ang < tol) return [b[0], a[1]];
+    if (Math.abs(ang - Math.PI / 2) < tol) return [a[0], b[1]];
+    return b;
+  }
+  function symGeom(s) {   // centre, angle (pas de 15°) et taille d'un symbole posé par glisser
+    var dx = s.b[0] - s.a[0], dy = s.b[1] - s.a[1], d = Math.hypot(dx, dy);
+    if (d < (s.k0 || 1) * 10) return { ang: 0, u: s.u0 };
+    var st = Math.PI / 12;
+    return { ang: Math.round(Math.atan2(dy, dx) / st) * st, u: Math.max(8, Math.min(90, d / 2.2)) };
+  }
+
   function distSeg(px, py, x1, y1, x2, y2) {
     var dx = x2 - x1, dy = y2 - y1, L2 = dx * dx + dy * dy;
     var t = L2 ? ((px - x1) * dx + (py - y1) * dy) / L2 : 0;
@@ -3304,8 +3395,9 @@ if (typeof module !== "undefined") module.exports = Grading;
         if (distSeg(x, y, s.pts[i - 1][0], s.pts[i - 1][1], s.pts[i][0], s.pts[i][1]) <= r + s.w / 2) return true;
       return s.pts.length === 1 && Math.hypot(x - s.pts[0][0], y - s.pts[0][1]) <= r + s.w / 2;
     }
-    if (s.t === "line" || s.t === "arrow")
+    if (s.t === "line" || s.t === "arrow" || s.t === "cote")
       return distSeg(x, y, s.a[0], s.a[1], s.b[0], s.b[1]) <= r + s.w / 2;
+    if (s.t === "sym") return Math.hypot(x - s.a[0], y - s.a[1]) <= r + (s.u || SYM_U) * 1.4;
     if (s.t === "text") {
       ctx.save(); ctx.font = "700 " + s.size + "px system-ui, Segoe UI, Arial, sans-serif";
       var w = ctx.measureText(s.s).width; ctx.restore();
@@ -3329,6 +3421,24 @@ if (typeof module !== "undefined") module.exports = Grading;
     this.locked = false; this.revealed = false; this.showCorr = false;
     state[this.id] = { validated: false, sketch: true, score: 0 };
     this.selfDone = false;
+    this.sym = SYMS[0][0]; this.meas = null;
+    var pal = $(".sk-syms", root);
+    if (pal) {
+      SYMS.forEach(function (d, i) {
+        var bt = document.createElement("button");
+        bt.type = "button"; bt.setAttribute("data-sym", d[0]); bt.setAttribute("aria-pressed", i ? "false" : "true"); bt.title = d[1];
+        var ic = document.createElement("canvas"), dpr = Math.max(2, window.devicePixelRatio || 1);
+        ic.width = 56 * dpr; ic.height = 38 * dpr; ic.setAttribute("aria-hidden", "true");
+        var g = ic.getContext("2d"); g.scale(dpr, dpr);
+        drawSym(g, d[0], 28, 19, 0, 7.5, "#1C2530", 1.4);
+        var sp = document.createElement("span"); sp.textContent = d[1];
+        bt.appendChild(ic); bt.appendChild(sp); pal.appendChild(bt);
+        bt.addEventListener("click", function () {
+          self.sym = d[0];
+          $$("[data-sym]", pal).forEach(function (x) { x.setAttribute("aria-pressed", x === bt ? "true" : "false"); });
+        });
+      });
+    }
 
     $$("[data-tool]", root).forEach(function (b) {
       b.addEventListener("click", function () { self.setTool(b.getAttribute("data-tool")); });
@@ -3380,6 +3490,8 @@ if (typeof module !== "undefined") module.exports = Grading;
   Sketch.prototype.setTool = function (t) {
     this.tool = t;
     this.root.classList.toggle("tool-erase", t === "erase");
+    var pal = $(".sk-syms", this.root); if (pal) pal.hidden = t !== "sym";
+    if (this.meas && t !== "measure") { this.meas = null; this.draw(); }
     $$("[data-tool]", this.root).forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-tool") === t ? "true" : "false"); });
   };
   var SK_ZOOMS = [1, 1.5, 2, 3, 4];
@@ -3419,8 +3531,16 @@ if (typeof module !== "undefined") module.exports = Grading;
     }
     this.canvas.setPointerCapture(e.pointerId);
     if (this.tool === "pen") this.cur = { t: "pen", pts: [[p.x, p.y]], c: this.color, w: w };
-    else this.cur = { t: this.tool, a: [p.x, p.y], b: [p.x, p.y], c: this.color, w: w };
+    else if (this.tool === "sym") this.cur = { t: "sym", k: this.sym, a: [p.x, p.y], b: [p.x, p.y], c: this.color, w: w, u0: SYM_U, k0: p.k };
+    else this.cur = { t: this.tool, a: [p.x, p.y], b: [p.x, p.y], c: this.color, w: w, k0: p.k };
     e.preventDefault();
+  };
+  Sketch.prototype.arrowLen = function () {   // 3 mm sur le dessin
+    return this.dec.pxPerCm ? this.dec.pxPerCm * 0.3 : 14;
+  };
+  Sketch.prototype.measLabel = function (s) {
+    if (!this.dec.pxPerCm) return "";
+    return fr(Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) / this.dec.pxPerCm * 10, 1) + " mm";
   };
   Sketch.prototype.eraseAt = function (p) {
     var r = Math.max(6, 11 * p.k), ctx = this.ctx, before = this.strokes.length;
@@ -3432,13 +3552,18 @@ if (typeof module !== "undefined") module.exports = Grading;
     if (!this.cur) return;
     var p = this.pos(e);
     if (this.cur.t === "pen") this.cur.pts.push([p.x, p.y]);
-    else { this.cur.b = [p.x, p.y]; this.measure(); }
+    else {
+      this.cur.b = (this.cur.t === "cote" || this.cur.t === "measure") ? snapHV(this.cur.a, [p.x, p.y]) : [p.x, p.y];
+      if (this.cur.t !== "sym") this.measure();
+    }
     this.draw();
   };
   Sketch.prototype.up = function () {
     if (this.erasing) { this.erasing = false; return; }
     if (!this.cur) return;
     var s = this.cur; this.cur = null;
+    if (s.t === "measure") { this.meas = Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) > 3 ? s : null; this.draw(); return; }
+    if (s.t === "sym") { var gg = symGeom(s); s.ang = gg.ang; s.u = gg.u; this.strokes.push(s); this.draw(); return; }
     var keep = s.t === "pen" ? s.pts.length > 1 : Math.hypot(s.b[0] - s.a[0], s.b[1] - s.a[1]) > 3;
     if (keep) this.strokes.push(s);
     this.draw();
@@ -3446,8 +3571,9 @@ if (typeof module !== "undefined") module.exports = Grading;
   Sketch.prototype.measure = function () {
     var el = $(".sk-meas", this.root);
     if (!this.dec.pxPerCm || !this.cur || !this.cur.b) return;
-    var L = Math.hypot(this.cur.b[0] - this.cur.a[0], this.cur.b[1] - this.cur.a[1]) / this.dec.pxPerCm;
-    el.textContent = "Longueur tracée : " + fr(L, 1) + " cm";
+    var mm = Math.hypot(this.cur.b[0] - this.cur.a[0], this.cur.b[1] - this.cur.a[1]) / this.dec.pxPerCm * 10;
+    el.textContent = (this.cur.t === "measure" ? "Mesure" : "Longueur tracée") + " sur le dessin : " + fr(mm, 1) +
+      " mm (valeur brute, échelle non appliquée)";
   };
   Sketch.prototype.textAt = function (e, p) {
     var self = this, stage = $(".sk-stage", this.root), r = stage.getBoundingClientRect();
@@ -3472,6 +3598,8 @@ if (typeof module !== "undefined") module.exports = Grading;
     ctx.save(); ctx.translate(p.l, p.t); this.dec.decorate(ctx); ctx.restore();
     if (opts.student) {
       var list = this.cur ? this.strokes.concat([this.cur]) : this.strokes;
+      var self = this;
+      if (opts.meas && this.meas && !this.cur) list = list.concat([this.meas]);
       list.forEach(function (s) {
         if (s.t === "pen") {
           ctx.save(); ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.lineCap = "round"; ctx.lineJoin = "round";
@@ -3480,13 +3608,16 @@ if (typeof module !== "undefined") module.exports = Grading;
           ctx.stroke(); ctx.restore();
         } else if (s.t === "line") line(ctx, s.a[0], s.a[1], s.b[0], s.b[1], s.c, s.w);
         else if (s.t === "arrow") arrow(ctx, s.a[0], s.a[1], s.b[0], s.b[1], s.c, s.w);
+        else if (s.t === "cote") coteN(ctx, s.a[0], s.a[1], s.b[0], s.b[1], s.c, self.arrowLen());
+        else if (s.t === "sym") { var g = s.u ? s : symGeom(s); drawSym(ctx, s.k, s.a[0], s.a[1], g.ang, g.u, s.c, s.w); }
+        else if (s.t === "measure") { if (opts.meas) measureMark(ctx, s, self.measLabel(s), s.k0 || 1); }
         else if (s.t === "text") text(ctx, s.s, s.x, s.y, s.c, s.size, "left", "700");
       });
     }
     if (opts.corr && this.dec.correction) { ctx.save(); ctx.translate(p.l, p.t); this.dec.correction(ctx); ctx.restore(); }
   };
   Sketch.prototype.draw = function () {
-    this.paint(this.ctx, { student: true, corr: this.showCorr && this.revealed });
+    this.paint(this.ctx, { meas: true, student: true, corr: this.showCorr && this.revealed });
   };
   Sketch.prototype.snapshot = function (opts, maxpx) {
     var c = document.createElement("canvas");
@@ -3501,6 +3632,7 @@ if (typeof module !== "undefined") module.exports = Grading;
     this.locked = true; state[this.id].validated = true;
     this.root.classList.add("locked");
     if (this.cur) this.cur = null;
+    this.meas = null;
     $$(".sk-toolbar button", this.root).forEach(function (b) {
       var keep = ["full", "drprint"].indexOf(b.getAttribute("data-act")) >= 0 || b.hasAttribute("data-zoom");
       if (!keep) b.disabled = true;
